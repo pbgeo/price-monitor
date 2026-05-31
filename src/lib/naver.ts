@@ -16,7 +16,6 @@ export async function searchNaverShopping(
   const url = new URL(NAVER_API_URL);
   url.searchParams.set("query", query);
   url.searchParams.set("display", String(display));
-  url.searchParams.set("sort", "price"); // 가격 오름차순
 
   const res = await fetch(url.toString(), {
     headers: {
