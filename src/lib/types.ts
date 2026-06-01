@@ -29,9 +29,10 @@ export interface ProductResult {
   productName: string;
   basePrice: number;
   tolerancePercent: number;
-  violations: SellerResult[];   // 기준가 미만
-  nearViolations: SellerResult[]; // 기준가 ± N% 이내 (위반 제외)
-  ok: boolean; // 위반/근접 없음
+  violations: SellerResult[];
+  nearViolations: SellerResult[];
+  ok: boolean;
+  error?: string;
 }
 
 export interface SearchResponse {
