@@ -38,7 +38,7 @@ export function classifyResults(
     }
   }
 
-for (const seller of Array.from(seen.values())) {
+  for (const seller of Array.from(seen.values())) {
     if (seller.status === "violation") violations.push(seller);
     else if (seller.status === "near") nearViolations.push(seller);
   }
