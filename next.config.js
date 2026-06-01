@@ -1,3 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  env: {
+    NEXT_PUBLIC_BUILD_DATE: new Date().toISOString().slice(0, 10),
+    NEXT_PUBLIC_VERSION: require("./package.json").version,
+  },
+};
 module.exports = nextConfig;
