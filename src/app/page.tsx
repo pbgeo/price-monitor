@@ -5,6 +5,9 @@ import ProductForm from "./components/ProductForm";
 import ResultCard from "./components/ResultCard";
 import { ProductInput, ProductResult } from "@/lib/types";
 
+const VERSION = process.env.NEXT_PUBLIC_VERSION ?? "";
+const BUILD_DATE = process.env.NEXT_PUBLIC_BUILD_DATE ?? "";
+
 export default function Home() {
   const [results, setResults] = useState<ProductResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -66,6 +69,11 @@ export default function Home() {
           <p className="text-gray-500 mt-1 text-sm">
             네이버 쇼핑에서 기준가 위반·근접 판매자를 자동으로 탐지합니다.
           </p>
+          {VERSION && BUILD_DATE && (
+            <p className="text-gray-400 mt-1 text-xs">
+              v{VERSION} · {BUILD_DATE} 배포
+            </p>
+          )}
         </div>
 
         {/* 입력 폼 */}
