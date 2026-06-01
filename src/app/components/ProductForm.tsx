@@ -34,7 +34,6 @@ export default function ProductForm({ onSubmit, loading }: Props) {
   }
 
   function parseBulk() {
-    // 형식: 제품명,기준가 (줄바꿈으로 구분)
     const parsed: Row[] = bulkText
       .split("\n")
       .map((line) => line.trim())
@@ -62,7 +61,7 @@ export default function ProductForm({ onSubmit, loading }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* 일괄 입력 토글 */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={() => setShowBulk((v) => !v)}
@@ -94,34 +93,38 @@ export default function ProductForm({ onSubmit, loading }: Props) {
 
       {/* 개별 행 입력 */}
       <div className="space-y-2">
-        <div className="grid grid-cols-12 gap-2 text-xs font-medium text-gray-500 px-1">
+        {/* 헤더 — 데스크탑에서만 표시 */}
+        <div className="hidden sm:grid sm:grid-cols-12 sm:gap-2 text-xs font-medium text-gray-500 px-1">
           <span className="col-span-7">제품명</span>
           <span className="col-span-4">기준가 (원)</span>
         </div>
+
         {rows.map((row, i) => (
-          <div key={i} className="grid grid-cols-12 gap-2">
+          <div key={i} className="flex flex-col gap-2 sm:grid sm:grid-cols-12 sm:gap-2">
             <input
               value={row.name}
               onChange={(e) => updateRow(i, "name", e.target.value)}
               placeholder="제품명"
-              className="col-span-7 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full sm:col-span-7 rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input
-              value={row.basePrice}
-              onChange={(e) => updateRow(i, "basePrice", e.target.value)}
-              placeholder="1500000"
-              type="text"
-              inputMode="numeric"
-              className="col-span-4 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              type="button"
-              onClick={() => removeRow(i)}
-              disabled={rows.length === 1}
-              className="col-span-1 text-gray-400 hover:text-red-500 disabled:opacity-30 text-lg leading-none"
-            >
-              ×
-            </button>
+            <div className="flex gap-2 sm:contents">
+              <input
+                value={row.basePrice}
+                onChange={(e) => updateRow(i, "basePrice", e.target.value)}
+                placeholder="기준가 (원)"
+                type="text"
+                inputMode="numeric"
+                className="flex-1 sm:col-span-4 rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={() => removeRow(i)}
+                disabled={rows.length === 1}
+                className="sm:col-span-1 w-10 shrink-0 text-gray-400 hover:text-red-500 disabled:opacity-30 text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
           </div>
         ))}
         <button
@@ -134,7 +137,7 @@ export default function ProductForm({ onSubmit, loading }: Props) {
       </div>
 
       {/* 근접 범위 */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
           근접 범위
         </label>
