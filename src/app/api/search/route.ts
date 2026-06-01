@@ -24,20 +24,26 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  try {
-    const results = await Promise.all(
-      products.map(async (product) => {
-        const items = await searchNaverShopping(product.name);
-        return classifyResults(product, items, tolerancePercent ?? 5);
-      })
-    );
+  const settled = await Promise.allSettled(
+    products.map(async (product) => {
+      const items = await searchNaverShopping(product.name);
+      return classifyResults(product, items, tolerancePercent ?? 5);
+    })
+  );
 
-    return NextResponse.json<SearchResponse>({ results });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : "알 수 없는 오류";
-    return NextResponse.json<SearchResponse>(
-      { results: [], error: message },
-      { status: 500 }
-    );
-  }
+  const results = settled.map((s, i) =>
+    s.status === "fulfilled"
+      ? s.value
+      : {
+          productName: products[i].name,
+          basePrice: products[i].basePrice,
+          tolerancePercent: tolerancePercent ?? 5,
+          violations: [],
+          nearViolations: [],
+          ok: false,
+          error: s.reason instanceof Error ? s.reason.message : "알 수 없는 오류",
+        }
+  );
+
+  return NextResponse.json<SearchResponse>({ results });
 }
